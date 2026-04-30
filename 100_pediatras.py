@@ -8,8 +8,14 @@ st.image("banner.png.png", use_container_width=True)
 def local_css():
     st.markdown("""
         <style>
-        .main [data-testid="stAppViewContainer"] {
-        background: radial-gradient(circle, #1a3a5f 0%, #08111d 100%);
+        /* Esto apunta directamente al contenedor principal del juego */
+    [data-testid="stAppViewContainer"] {
+        background: radial-gradient(circle, #1a3a5f 0%, #08111d 100%) !important;
+    }
+
+    /* Esto quita el color blanco/gris que Streamlit pone encima por defecto */
+    [data-testid="stHeader"], [data-testid="stHeader"] > div {
+        background-color: rgba(0,0,0,0) !important;
     }
         .stButton>button { width: 100%; border-radius: 5px; font-weight: bold; }
         .answer-box {
