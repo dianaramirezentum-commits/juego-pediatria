@@ -165,7 +165,7 @@ with mod_c2:
             if similitud(entrada, txt) > 0.75:
                 if revelar_opcion(i, pts):
                   mostrar_reaccion("acierto")
-                    st.rerun()
+                  st.rerun()
 
 # Tablero de Respuestas (Grid)
 st.write("---")
