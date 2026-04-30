@@ -63,10 +63,10 @@ def mostrar_reaccion(tipo):
     with placeholder.container():
         if tipo == "acierto":
             # Puedes cambiar este link por el GIF que más te guste
-            st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZ1JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7abKhOpu0NwenH3O/giphy.gif", use_container_width=True)
+            st.image("https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnExcGUxNm54Z3gzbTltaWZkeHlzc2UzZnY0MWdiZTNpMm41b3I5cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cdNSp4L5vCU7aQrYnV/giphy.gif", use_container_width=True)
         else:
             # Este es para cuando fallan (la X gigante)
-            st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZ1JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGmX92vXpT3BC/giphy.gif", use_container_width=True)
+            st.image("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdDY5b2tueHp5MHRhNjR3bGNpbzN1Y3Rrbm84ajRsZGR4bHMyMGE4eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/FaFu1s2hO1xYHdpk6N/giphy.gif", use_container_width=True)
     
     time.sleep(2) # El GIF se queda 2 segundos en pantalla
     placeholder.empty() # ¡Puff! Desaparece
