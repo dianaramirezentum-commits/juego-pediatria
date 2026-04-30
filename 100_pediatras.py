@@ -8,7 +8,7 @@ def local_css():
     st.markdown("""
         <style>
         .main { background-color: #0E1117; color: white; }
-        .stButton>button { width: 100%; border-radius: 5px; height: 3em; font-weight: bold; }
+        .stButton>button { width: 100%; border-radius: 5px; font-weight: bold; }
         .answer-box {
             background: linear-gradient(145deg, #004AAD, #002B6B);
             border: 3px solid #FFD700;
@@ -28,20 +28,29 @@ def local_css():
         .score-box {
             background-color: #1E1E1E;
             border: 2px solid #FFD700;
-            font-size: 50px;
+            font-size: 45px;
             text-align: center;
             color: #FFD700;
             border-radius: 10px;
-            padding: 10px;
+            padding: 5px;
         }
-        .strike-text { color: #FF4B4B; font-size: 80px; font-weight: bold; text-align: center; }
+        .bank-box {
+            background-color: #FFD700;
+            color: #1E1E1E;
+            font-size: 60px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .strike-text { color: #FF4B4B; font-size: 80px; font-weight: bold; text-align: center; margin-top: -20px; }
         .question-text { background-color: #262730; padding: 20px; border-radius: 10px; border-left: 5px solid #004AAD; }
         </style>
     """, unsafe_allow_html=True)
 
 local_css()
 
-# --- BASE DE DATOS DE PREGUNTAS ---
+# --- BASE DE DATOS (Mismas 21 preguntas) ---
 preguntas_db = [
     {"p": "Signos principales en un toxíndrome anticolinérgico", "r": [("Midriasis", 30), ("Taquicardia", 25), ("Piel seca", 20), ("Rubicundez", 15), ("Hipertermia", 10)]},
     {"p": "Principales agentes virales que generan resfriado común", "r": [("Rinovirus", 30), ("Coronavirus", 25), ("Virus Parainfluenza", 20), ("Virus Influenza", 15), ("Adenovirus", 10)]},
@@ -71,48 +80,73 @@ if 'idx' not in st.session_state:
     st.session_state.idx = 0
     st.session_state.puntos_a = 0
     st.session_state.puntos_b = 0
+    st.session_state.banca = 0
     st.session_state.strikes = 0
     st.session_state.reveladas = []
 
 def similitud(a, b):
     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
 
+def revelar_opcion(i, pts):
+    if i not in st.session_state.reveladas:
+        st.session_state.reveladas.append(i)
+        st.session_state.banca += pts
+        return True
+    return False
+
 # --- INTERFAZ PRINCIPAL ---
 st.title("🩺 100 Pediatras Dijeron")
 
-# Marcadores Superiores
-c1, c2, c3 = st.columns([1, 1, 1])
+# Fila Superior: Marcadores y Banca
+c1, c_bank, c2 = st.columns([1, 1, 1])
+
 with c1:
     st.markdown("### Equipo A")
     st.markdown(f"<div class='score-box'>{st.session_state.puntos_a}</div>", unsafe_allow_html=True)
-    if st.button("+ Puntos A"): st.session_state.puntos_a += 10
+    if st.button("🏆 Banca -> Equipo A"):
+        st.session_state.puntos_a += st.session_state.banca
+        st.session_state.banca = 0
+        st.rerun()
+
+with c_bank:
+    st.markdown("<h3 style='text-align: center;'>BANCA</h3>", unsafe_allow_html=True)
+    st.markdown(f"<div class='bank-box'>{st.session_state.banca}</div>", unsafe_allow_html=True)
+
 with c2:
-    st.markdown(f"<div class='strike-text'>{'X ' * st.session_state.strikes}</div>", unsafe_allow_html=True)
-    if st.button("❌ Marcar Error"): 
-        st.session_state.strikes = (st.session_state.strikes + 1) % 4
-with c3:
     st.markdown("### Equipo B")
     st.markdown(f"<div class='score-box'>{st.session_state.puntos_b}</div>", unsafe_allow_html=True)
-    if st.button("+ Puntos B"): st.session_state.puntos_b += 10
+    if st.button("🏆 Banca -> Equipo B"):
+        st.session_state.puntos_b += st.session_state.banca
+        st.session_state.banca = 0
+        st.rerun()
+
+# Fila de Errores (Strikes)
+st.markdown(f"<div class='strike-text'>{'X ' * st.session_state.strikes}</div>", unsafe_allow_html=True)
+err_col1, err_col2, err_col3 = st.columns([2,1,2])
+with err_col2:
+    if st.button("❌ Marcar Error"): 
+        st.session_state.strikes = (st.session_state.strikes + 1) % 4
+        st.rerun()
 
 # Pregunta
 pregunta_actual = preguntas_db[st.session_state.idx]
 st.markdown(f"<div class='question-text'><h2>{st.session_state.idx + 1}. {pregunta_actual['p']}</h2></div>", unsafe_allow_html=True)
 st.write("")
 
-# Lógica de entrada de texto
-moderador_col, _ = st.columns([2,1])
-with moderador_col:
-    entrada = st.text_input("Moderador, escribe aquí la respuesta:")
-    if st.button("Validar"):
+# Panel de entrada del moderador
+mod_c1, mod_c2 = st.columns([3, 1])
+with mod_c1:
+    entrada = st.text_input("Escribe la respuesta del alumno:", placeholder="Ej. Rinovirus...")
+with mod_c2:
+    st.write("##")
+    if st.button("Validar ✅"):
         for i, (txt, pts) in enumerate(pregunta_actual['r']):
             if similitud(entrada, txt) > 0.75:
-                if i not in st.session_state.reveladas:
-                    st.session_state.reveladas.append(i)
+                if revelar_opcion(i, pts):
                     st.balloons()
-                break
+                    st.rerun()
 
-# Tablero de Respuestas
+# Tablero de Respuestas (Grid)
 st.write("---")
 cols = st.columns(2)
 for i, (txt, pts) in enumerate(pregunta_actual['r']):
@@ -120,20 +154,32 @@ for i, (txt, pts) in enumerate(pregunta_actual['r']):
         if i in st.session_state.reveladas:
             st.markdown(f"<div class='answer-box'>{txt.upper()} — {pts}</div>", unsafe_allow_html=True)
         else:
+            # Botón oculto para revelar manualmente y sumar a banca
             if st.button(f"Revelar {i+1}", key=f"rev_{i}"):
-                st.session_state.reveladas.append(i)
+                revelar_opcion(i, pts)
                 st.rerun()
             st.markdown(f"<div class='answer-box'>{i+1}</div>", unsafe_allow_html=True)
 
-# Navegación
-st.sidebar.title("Control de Juego")
+# Barra Lateral de Navegación
+st.sidebar.title("Configuración")
 if st.sidebar.button("Siguiente Pregunta ➡️"):
     if st.session_state.idx < len(preguntas_db) - 1:
         st.session_state.idx += 1
         st.session_state.reveladas = []
         st.session_state.strikes = 0
+        st.session_state.banca = 0 # Reiniciamos banca para la nueva pregunta
         st.rerun()
 
-if st.sidebar.button("Reiniciar Juego 🔄"):
+st.sidebar.write("---")
+# Ajuste manual por si te equivocas
+st.sidebar.subheader("Ajuste Manual")
+manual_a = st.sidebar.number_input("Puntos Equipo A", value=st.session_state.puntos_a)
+manual_b = st.sidebar.number_input("Puntos Equipo B", value=st.session_state.puntos_b)
+if st.sidebar.button("Actualizar Marcadores"):
+    st.session_state.puntos_a = manual_a
+    st.session_state.puntos_b = manual_b
+    st.rerun()
+
+if st.sidebar.button("Reiniciar Todo 🔄"):
     st.session_state.clear()
     st.rerun()
