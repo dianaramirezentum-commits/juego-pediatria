@@ -1,6 +1,6 @@
 import streamlit as st
 from difflib import SequenceMatcher
-
+import time
 # --- CONFIGURACIÓN Y ESTILO ---
 # Esto pone tu banner al principio de la página
 st.image("banner.png.png", use_container_width=True)
@@ -58,7 +58,18 @@ def local_css():
     """, unsafe_allow_html=True)
 
 local_css()
-
+def mostrar_reaccion(tipo):
+    placeholder = st.empty() # Creamos el espacio vacío
+    with placeholder.container():
+        if tipo == "acierto":
+            # Puedes cambiar este link por el GIF que más te guste
+            st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZ1JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7abKhOpu0NwenH3O/giphy.gif", use_container_width=True)
+        else:
+            # Este es para cuando fallan (la X gigante)
+            st.image("https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZueGZ1JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGmX92vXpT3BC/giphy.gif", use_container_width=True)
+    
+    time.sleep(2) # El GIF se queda 2 segundos en pantalla
+    placeholder.empty() # ¡Puff! Desaparece
 # --- BASE DE DATOS (Mismas 21 preguntas) ---
 preguntas_db = [
     {"p": "Signos principales en un toxíndrome anticolinérgico", "r": [("Midriasis", 30), ("Taquicardia", 25), ("Piel seca", 20), ("Rubicundez", 15), ("Hipertermia", 10)]},
@@ -135,6 +146,7 @@ err_col1, err_col2, err_col3 = st.columns([2,1,2])
 with err_col2:
     if st.button("❌ Marcar Error"): 
         st.session_state.strikes = (st.session_state.strikes + 1) % 4
+        mostrar_reaccion("error")
         st.rerun()
 
 # Pregunta
@@ -152,7 +164,7 @@ with mod_c2:
         for i, (txt, pts) in enumerate(pregunta_actual['r']):
             if similitud(entrada, txt) > 0.75:
                 if revelar_opcion(i, pts):
-                    st.balloons()
+                  mostrar_reaccion("acierto")
                     st.rerun()
 
 # Tablero de Respuestas (Grid)
