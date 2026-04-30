@@ -2,7 +2,8 @@ import streamlit as st
 from difflib import SequenceMatcher
 
 # --- CONFIGURACIÓN Y ESTILO ---
-st.set_page_config(page_title="100 Pediatras Dijeron", layout="wide")
+# Esto pone tu banner al principio de la página
+st.image("banner.png", use_container_width=True)
 
 def local_css():
     st.markdown("""
