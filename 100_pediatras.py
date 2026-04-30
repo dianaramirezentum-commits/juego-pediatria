@@ -8,7 +8,9 @@ st.image("banner.png.png", use_container_width=True)
 def local_css():
     st.markdown("""
         <style>
-        .main { background-color: #0E1117; color: white; }
+        .main [data-testid="stAppViewContainer"] {
+        background: radial-gradient(circle, #1a3a5f 0%, #08111d 100%);
+    }
         .stButton>button { width: 100%; border-radius: 5px; font-weight: bold; }
         .answer-box {
             background: linear-gradient(145deg, #004AAD, #002B6B);
