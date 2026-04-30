@@ -74,7 +74,7 @@ def mostrar_reaccion(tipo):
 preguntas_db = [
     {"p": "Signos principales en un toxíndrome anticolinérgico", "r": [("Midriasis", 30), ("Taquicardia", 25), ("Piel seca", 20), ("Rubicundez", 15), ("Hipertermia", 10)]},
     {"p": "Principales agentes virales que generan resfriado común", "r": [("Rinovirus", 30), ("Coronavirus", 25), ("Virus Parainfluenza", 20), ("Virus Influenza", 15), ("Adenovirus", 10)]},
-    {"p": "Pasos iniciales del RN (Algoritmo Reanimación Neonatal)", "r": [("Calor", 30), ("Posicionar vía aérea", 25), ("Aspiración de secreciones", 20), ("Secar", 15), ("Estimular", 10)]},
+    {"p": "Pasos iniciales del RN (Algoritmo Reanimación Neonatal)", "r": [("Calentar", 30), ("Posicionar vía aérea", 25), ("Aspiración de secreciones", 20), ("Secar", 15), ("Estimular", 10)]},
     {"p": "Agentes etiológicos más frecuentes en OMA", "r": [("Streptococcus pneumoniae", 30), ("Haemophilus influenzae", 25), ("Moraxella catarrhalis", 20), ("Streptococcus pyogenes", 15), ("Pseudomonas", 10)]},
     {"p": "Principales agentes de Diarrea Infecciosa en < 1 año", "r": [("Rotavirus", 30), ("Adenovirus entérico", 25), ("E. coli", 20), ("Campylobacter jejuni", 15), ("Salmonella", 10)]},
     {"p": "Datos de dificultad respiratoria (Silverman-Andersen) por orden", "r": [("Disociación toraco-abdominal", 30), ("Tiraje intercostal", 25), ("Retracción xifoidea", 20), ("Aleteo nasal", 15), ("Quejido respiratorio", 10)]},
